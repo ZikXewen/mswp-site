@@ -4,10 +4,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build:wasm": "cd wasm-lib && wasm-pack build"
+    "wasm": "wasm-pack build ./wasm-lib"
   },
   "devDependencies": {
-    "vite": "^3.0.0",
-    "vite-plugin-wasm": "git://github.com/Menci/vite-plugin-wasm.git"
+    "grapheme-splitter": "^1.0.4",
+    "vite": "^3.0.3",
+    "vite-plugin-wasm": "^2.1.0"
   }
 }
