@@ -17,14 +17,15 @@ function render() {
     for (let x = 0; x < data.length; x++) {
       const rowEl = document.createElement('div')
       for (let y = 0; y < (data[x]?.length || 0); y++) {
-        const cellEl = document.createElement('a')
+        const cellEl = document.createElement('span')
+        cellEl.style.width = '1.3rem'
+        cellEl.style.display = 'inline-block'
         cellEl.innerText = data[x]?.at(y) || ''
         if (
           !ended &&
           (cellEl.innerText === '⬛' || cellEl.innerText === '🏳️')
         ) {
-          cellEl.href = '#'
-          cellEl.style.textDecoration = 'none'
+          cellEl.style.cursor = 'pointer'
           cellEl.addEventListener('click', (e) => {
             e.preventDefault()
             wasm.open(x, y)
