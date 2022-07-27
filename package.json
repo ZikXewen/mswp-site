@@ -4,8 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "wasm": "wasm-pack build ./wasm-lib",
-    "build": "wasm-pack build ./wasm-lib && vite build"
+    "wasm": "wasm-pack build ./wasm-lib"
   },
   "devDependencies": {
     "grapheme-splitter": "^1.0.4",
