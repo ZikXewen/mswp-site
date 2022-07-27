@@ -34,3 +34,8 @@ pub fn flag(x: usize, y: usize) {
 pub fn fetch() -> String {
     GAME.with(|game| game.borrow().to_string())
 }
+
+#[wasm_bindgen(js_name=gameEnded)]
+pub fn game_ended() -> bool {
+    GAME.with(|game| game.borrow().end)
+}

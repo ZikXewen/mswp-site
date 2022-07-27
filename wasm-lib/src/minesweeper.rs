@@ -8,6 +8,7 @@ use rand::Rng;
 #[derive(Clone, PartialEq)]
 pub enum Cell {
     Closed,
+    Flag,
     Bomb,
     Empty(u8),
 }
@@ -21,6 +22,8 @@ pub struct Minesweeper {
     height: usize,
     mines: HashSet<Position>,
     cells: Vec<Vec<Cell>>,
+    to_goal: usize,
+    pub end: bool,
 }
 
 impl Minesweeper {
@@ -34,6 +37,8 @@ impl Minesweeper {
             width,
             height,
             mines,
+            to_goal: width * height - mines_count,
+            end: false,
             cells: vec![vec![Cell::Closed; width]; height],
         }
     }
@@ -51,41 +56,58 @@ impl Minesweeper {
             .filter(|p| self.mines.contains(p))
             .count() as u8
     }
+    fn closed(&self, Position(x, y): Position) -> bool {
+        self.cells[x][y] == Cell::Closed || self.cells[x][y] == Cell::Flag
+    }
+    fn set(&mut self, Position(x, y): Position, val: Cell) {
+        self.cells[x][y] = val;
+    }
     pub fn open(&mut self, start: Position) {
         if self.mines.contains(&start) {
             let Position(x, y) = start;
             self.cells[x][y] = Cell::Bomb;
+            self.end = true;
             return;
         }
         let mut stk = vec![start];
-        while let Some(Position(x, y)) = stk.pop() {
-            if self.cells[x][y] == Cell::Closed {
-                let neighbor_mines = self.count_neighbor_mines(Position(x, y));
+        while let Some(pos) = stk.pop() {
+            if self.closed(pos) {
+                let neighbor_mines = self.count_neighbor_mines(pos);
                 if neighbor_mines > 0 {
-                    self.cells[x][y] = Cell::Empty(neighbor_mines);
+                    self.set(pos, Cell::Empty(neighbor_mines));
                 } else {
-                    self.cells[x][y] = Cell::Empty(0);
-                    for Position(x, y) in self.neighbors(Position(x, y)) {
-                        if self.cells[x][y] == Cell::Closed {
-                            stk.push(Position(x, y));
-                        }
+                    self.set(pos, Cell::Empty(0));
+                    self.neighbors(pos)
+                        .filter(|&p| self.closed(p))
+                        .for_each(|p| stk.push(p));
+                }
+                self.to_goal -= 1;
+            }
+        }
+        if self.to_goal == 0 {
+            for x in 0..self.height {
+                for y in 0..self.width {
+                    if self.cells[x][y] == Cell::Flag {
+                        self.set(Position(x, y), Cell::Closed);
                     }
                 }
             }
+            self.end = true;
         }
     }
     pub fn flag(&mut self, pos: Position) {
-        todo!()
+        self.set(pos, Cell::Flag);
     }
 }
 
 impl fmt::Display for Minesweeper {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        for row in &self.cells {
-            for c in row {
-                f.write_str(match c {
+        for x in 0..self.height {
+            for y in 0..self.width {
+                f.write_str(match self.cells[x][y] {
                     Cell::Bomb => "💣",
                     Cell::Closed => "⬛",
+                    Cell::Flag => "🏳️",
                     Cell::Empty(0) => "🟦",
                     Cell::Empty(1) => "1️⃣",
                     Cell::Empty(2) => "2️⃣",
@@ -121,5 +143,13 @@ mod tests {
         dbg!(game.neighbors(Position(0, 1)).collect::<Vec<_>>());
         dbg!(game.neighbors(Position(3, 7)).collect::<Vec<_>>());
         dbg!(game.neighbors(Position(4, 7)).collect::<Vec<_>>());
+    }
+
+    #[test]
+    fn flag_test() {
+        let mut game = Minesweeper::new(5, 5, 4);
+        game.flag(Position(2, 2));
+        game.flag(Position(2, 4));
+        println!("{game}");
     }
 }

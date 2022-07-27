@@ -10,7 +10,7 @@ function render() {
     .trimEnd()
     .split('\n')
     .map((x) => splitter.splitGraphemes(x))
-  const lost = data.find((row) => row.includes('💣')) !== undefined
+  const ended = wasm.gameEnded()
   if (display) {
     display.innerHTML = ''
     display.style.textAlign = 'center'
@@ -19,7 +19,10 @@ function render() {
       for (let y = 0; y < (data[x]?.length || 0); y++) {
         const cellEl = document.createElement('a')
         cellEl.innerText = data[x]?.at(y) || ''
-        if (cellEl.innerText === '⬛' && !lost) {
+        if (
+          !ended &&
+          (cellEl.innerText === '⬛' || cellEl.innerText === '🏳️')
+        ) {
           cellEl.href = '#'
           cellEl.style.textDecoration = 'none'
           cellEl.addEventListener('click', (e) => {
@@ -40,11 +43,14 @@ function render() {
   }
 }
 
-document.getElementById('restart-btn')?.addEventListener('click', (e) => {
-  e.preventDefault()
+function startGame() {
   wasm.start(16, 30, 70)
   render()
+}
+
+document.getElementById('restart-btn')?.addEventListener('click', (e) => {
+  e.preventDefault()
+  startGame()
 })
 
-wasm.start(16, 30, 70)
-render()
+startGame()
