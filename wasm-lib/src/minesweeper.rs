@@ -95,8 +95,12 @@ impl Minesweeper {
             self.end = true;
         }
     }
-    pub fn flag(&mut self, pos: Position) {
-        self.set(pos, Cell::Flag);
+    pub fn flag(&mut self, Position(x, y): Position) {
+        if self.cells[x][y] == Cell::Flag {
+            self.set(Position(x, y), Cell::Closed);
+        } else {
+            self.set(Position(x, y), Cell::Flag);
+        }
     }
 }
 
