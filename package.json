@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "wasm": "wasm-pack build ./wasm-lib"
+    "dev": "vite"
   },
   "devDependencies": {
     "grapheme-splitter": "^1.0.4",
+    "mswp": "^0.1.0",
     "vite": "^3.0.3",
     "vite-plugin-wasm": "^2.1.0"
   }

@@ -1,4 +1,4 @@
-import * as wasm from '../wasm-lib/pkg/wasm_lib'
+import * as wasm from 'mswp'
 import Splitter from 'grapheme-splitter'
 
 const splitter = new Splitter()

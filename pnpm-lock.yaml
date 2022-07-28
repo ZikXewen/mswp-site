@@ -2,11 +2,13 @@ lockfileVersion: 5.4
 
 specifiers:
   grapheme-splitter: ^1.0.4
+  mswp: ^0.1.0
   vite: ^3.0.3
   vite-plugin-wasm: ^2.1.0
 
 devDependencies:
   grapheme-splitter: 1.0.4
+  mswp: 0.1.0
   vite: 3.0.3
   vite-plugin-wasm: 2.1.0_vite@3.0.3
 
@@ -247,6 +249,10 @@ packages:
     resolution: {integrity: sha512-+5FPy5PnwmO3lvfMb0AsoPaBG+5KHUI0wYFXOtYPnVVVspTFUuMZNfNaNVRt3FZadstu2c8x23vykRW/NBoU6A==}
     dependencies:
       has: 1.0.3
+    dev: true
+
+  /mswp/0.1.0:
+    resolution: {integrity: sha512-Y9aDLs9JJMfECQho3hh+DuPD8WSxJrjN+dlX/SrQPZVv39AoijCxMqklBCw8A3blP013UOAA1OIF+MSBSmZfFA==}
     dev: true
 
   /nanoid/3.3.4:
